@@ -1,0 +1,36 @@
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
+NPROC_PER_NODE=8 \
+swift rlhf \
+    --rlhf_type grpo \
+    --model /shared/models/Qwen/Qwen3-0.6B \
+    --tuner_type full \
+    --dataset /data/heyudong/dataset/rl/DAPO-Math-17k.jsonl \
+    --load_from_cache_file true \
+    --torch_dtype bfloat16 \
+    --num_train_epochs 1 \
+    --per_device_train_batch_size 8 \
+    --per_device_eval_batch_size 8 \
+    --learning_rate 1e-6 \
+    --save_total_limit 2 \
+    --logging_steps 5 \
+    --output_dir model/qwen3-grpo \
+    --gradient_accumulation_steps 1 \
+    --warmup_ratio 0.05 \
+    --dataloader_num_workers 4 \
+    --max_length 4096 \
+    --max_completion_length 4096 \
+    --vllm_max_model_len 8192 \
+    --reward_funcs accuracy \
+    --num_generations 16 \
+    --use_vllm true \
+    --vllm_mode colocate \
+    --vllm_gpu_memory_utilization 0.4 \
+    --sleep_level 1 \
+    --offload_model true \
+    --offload_optimizer true \
+    --deepspeed zero3 \
+    --vllm_tensor_parallel_size 1 \
+    --temperature 1.0 \
+    --top_p 0.85 \
+    --log_completions true \
+    --overlong_filter true
